@@ -23,32 +23,25 @@ L'infrastructure est découpée en plusieurs couches pour garantir performance e
    ```bash
    git clone [https://github.com/Cryptek135/monitoring-stack-docker.git](https://github.com/Cryptek135/monitoring-stack-docker.git)
    cd monitoring-stack-docker
-Lancer les services :
 
-Bash
+## 🌐 Accès à l'interface
+L'interface de monitoring est désormais sécurisée et accessible uniquement via le reverse proxy :
+* **URL** : `http://localhost` (ou l'IP de votre serveur)
+* **Port** : 80 (Standard Web)
 
-sudo docker compose up -d
-L'interface est désormais accessible sur http://localhost (ou l'IP du serveur).
+## 🔒 Sécurité et Optimisation
+* **Isolation réseau** : Le port natif de Netdata (19999) est fermé à l'extérieur. Seul le conteneur Nginx peut communiquer avec lui en interne.
+* **Défense périmétrique** : Fail2Ban surveille les logs Nginx et bannit automatiquement les IP effectuant des scans de vulnérabilités.
+* **Accès restreint** : Les répertoires sensibles de l'hôte (`/proc`, `/sys`) sont montés en mode **ReadOnly** pour empêcher toute modification depuis le conteneur.
 
-🔒 Sécurité et Optimisation
-Isolation réseau : Accès direct à Netdata désactivé, tout trafic passe par Nginx.
+## 🚨 Cas d'usage : Détection d'incident réel
+Lors de la phase de test, le système a prouvé son efficacité en détectant une saturation critique :
+> **NOTIF DISCORD** : `mon-serveur-netdata is critical, Disk / space usage = 99%`
 
-Défense périmétrique : Configuration de Fail2Ban pour détecter les scans de vulnérabilités sur le port 80.
 
-Persistance des données : Utilisation de volumes Docker pour conserver les configurations d'alertes Discord.
 
-Accès restreint : Montage des répertoires sensibles (/proc, /sys) en mode Lecture Seule (ReadOnly).
-
-🚨 Cas d'usage : Détection d'incident réel
-Lors des tests, le système a permis de détecter une saturation critique du disque :
-
-NOTIF DISCORD : mon-serveur-netdata is critical, Disk / space usage = 99%
-
-🧠 Compétences acquises
-Administration de serveurs Linux et gestion des services (Systemd).
-
-Maîtrise de la conteneurisation avec Docker et Docker Compose.
-
-Mise en œuvre de stratégies de sécurité (Reverse Proxy, IDS/IPS avec Fail2Ban).
-
-Monitoring et Observabilité (Gestion des seuils d'alerte et Webhooks).
+## 🧠 Compétences acquises
+* **Administration Linux** : Gestion des services avec `systemctl` (Apache vs Nginx) et analyse de logs.
+* **Conteneurisation** : Orchestration multi-services avec Docker Compose et gestion des volumes persistants.
+* **Sécurité** : Mise en place d'un Reverse Proxy et d'un système de détection d'intrusion (IDS/IPS).
+* **Monitoring** : Configuration de seuils d'alertes et intégration d'API tierces (Webhooks Discord).
