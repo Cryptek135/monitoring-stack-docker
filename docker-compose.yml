@@ -12,6 +12,7 @@ services:
       - ./.htpasswd:/etc/nginx/.htpasswd:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - ./logs:/var/log/nginx
     depends_on:
       - netdata
 
