@@ -5,8 +5,12 @@ services:
     container_name: nginx_proxy
     ports:
       - "80:80" # On expose uniquement le port web standard
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     depends_on:
       - netdata
 
@@ -24,6 +28,8 @@ services:
       - NET_ADMIN
     security_opt:
       - apparmor:unconfined
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - netdataconfig:/etc/netdata
       - netdatalib:/var/lib/netdata
@@ -34,6 +40,8 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   netdataconfig:
